@@ -50,7 +50,7 @@ namespace IndSearchFiles
             }
             catch (System.IO.DirectoryNotFoundException)
             {
-                Console.WriteLine("такой папки нет");
+                Console.WriteLine("Указано имя несуществующей или недоступной папки...");
             }
             catch (System.UnauthorizedAccessException)
             {
