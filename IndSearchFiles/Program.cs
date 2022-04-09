@@ -23,23 +23,27 @@ namespace IndSearchFiles
         static void Temp ()
         {
             string s;
-            Console.WriteLine("введите папку где неужно найти файл");
+            Console.WriteLine("Введите имя папки");
             s = Console.ReadLine();          
-            List<Name>[] Table = new List<Name>[256];
+            List<Name>[] Table = new List<Name>[256];                                 //создания массива списков
             for (int i = 0; i < Table.Length; i++)
                 Table[i] = new List<Name>();
             Filling(s, Table);
             Console.WriteLine();
-            Console.WriteLine("введите файл, котороый нужно найти(с расширением)");
-            s = Console.ReadLine();
-            Search(s, Table);
-            }
+            Console.WriteLine("1: - Поиск файла по имени  2: - Выход");
+            while (Convert.ToInt32(Console.ReadLine()) == 1) 
+            {
+                Console.WriteLine("Введите имя файла для поиска (регистр не учитывается)");
+                s = Console.ReadLine();
+                Search(s, Table);
+            } 
+        }
         static void Filling (string s, List<Name>[] Table)
         {
             try
             {
                 foreach (string file in Directory.GetFiles(s))
-                    Table[Hash(Path.GetFileName(file))].Add(new Name(file, Path.GetFileName(file.ToLower())));
+                    Table[Hash(Path.GetFileName(file).ToLower())].Add(new Name(file, Path.GetFileName(file.ToLower()))); //добавление в список 
                 foreach (string folder in Directory.GetDirectories(s))
                     Filling(folder, Table);
                 Console.Write('.');
@@ -50,10 +54,10 @@ namespace IndSearchFiles
             }
             catch (System.UnauthorizedAccessException)
             {
-                Console.Write("{0} закрытая папка ",s);
+                Console.Write("нет доступа к папке {0}",s);
             }
         }
-        static int Hash (string name)
+        static int Hash (string name)                                              
         {
             int hash = 0;
             foreach (char c in name)
@@ -62,7 +66,7 @@ namespace IndSearchFiles
         }
         static void Search(string s, List<Name>[] Table)
         {
-            int ind = Hash(s), k= 0;
+            int ind = Hash(s.ToLower()), k= 0;
             foreach (Name name in Table[ind])
                 if (s.ToLower() == name.Short)
                     Console.WriteLine(name.Full);
